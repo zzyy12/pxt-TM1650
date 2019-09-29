@@ -24,24 +24,7 @@ namespace DIGTM {
         pins.i2cWriteNumber(DISPLAY_I2C_ADDRESS + (bit % 4), d, NumberFormat.Int8BE)
     }
 
-    /**
-     * turn on display
-     
-    //% blockId="TM650_ON" block="turn on display"
-    //% weight=50 blockGap=8
-    export function on() {
-        cmd(_intensity * 16 + 1)
-    }*/
 
-    /**
-     * turn off display
-     
-    //% blockId="TM650_OFF" block="turn off display"
-    //% weight=50 blockGap=8
-    export function off() {
-        _intensity = 0
-        cmd(0)
-    }*/
 
     /**
      * clear display content
@@ -63,10 +46,11 @@ namespace DIGTM {
      */
     //% blockId="HaodaBit_TM650_DIGIT" block="4DigitDisplay show digit %num|at %bit"
     //% weight=80 blockGap=8
-    //% num.max=15 num.min=0
+    //% num.max=9 num.min=0
     export function digit(num: number, bit: number) {
-        dbuf[bit % 4] = _SEG[num % 16]
-        dat(bit, _SEG[num % 16])
+        let beap = bit - 1;
+        dbuf[beap % 4] = _SEG[num % 16]
+        dat(beap, _SEG[num % 16])
     }
 
     /**
@@ -87,23 +71,6 @@ namespace DIGTM {
         digit(Math.idiv(num, 100) % 10, 1)
     }
 
-    /**
-     * show a number in hex format
-     * @param num is number will be shown, eg: 123
-     
-    //% blockId="HaodaBit_TM650_SHOW_HEX_NUMBER" block="show hex number %num"
-    //% weight=90 blockGap=8
-    export function showHex(num: number) {
-        if (num < 0) {
-            dat(0, 0x40) // '-'
-            num = -num
-        }
-        else
-            digit((num >> 12) % 16, 0)
-        digit(num % 16, 3)
-        digit((num >> 4) % 16, 2)
-        digit((num >> 8) % 16, 1)
-    }*/
 
     /**
      * show Dot Point in given position
@@ -113,26 +80,10 @@ namespace DIGTM {
     //% blockId="HaodaBit_TM650_SHOW_DP" block="4DigitDisplay show dot point %bit|show %num"
     //% weight=80 blockGap=8
     export function showDpAt(bit: number, show: boolean) {
-        if (show) dat(bit, dbuf[bit % 4] | 0x80)
-        else dat(bit, dbuf[bit % 4] & 0x7F)
+        let baep = bit - 1;
+        if (show) dat(baep, dbuf[baep % 4] | 0x80)
+        else dat(baep, dbuf[baep % 4] & 0x7F)
     }
 
-    /**
-     * set display intensity
-     * @param dat is intensity of the display, eg: 3
-     
-    //% blockId="TM650_INTENSITY" block="set intensity %dat"
-    //% weight=70 blockGap=8
-    export function setIntensity(dat: number) {
-        if ((dat < 0) || (dat > 8))
-            return;
-        if (dat == 0)
-            off()
-        else {
-            _intensity = dat
-            cmd((dat << 4) | 0x01)
-        }
-    }
 
-    on();*/
 }
