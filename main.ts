@@ -53,6 +53,11 @@ namespace DIGTM {
         dat(beap, _SEG[num % 16])
     }
 
+     function digit1(num: number, bit: number) {
+        dbuf[bit % 4] = _SEG[num % 16]
+        dat(bit, _SEG[num % 16])
+    }
+
     /**
      * show a number in display
      * @param num is number will be shown, eg: 100
@@ -65,10 +70,10 @@ namespace DIGTM {
             num = -num
         }
         else
-            digit(Math.idiv(num, 1000) % 10, 0)
-        digit(num % 10, 3)
-        digit(Math.idiv(num, 10) % 10, 2)
-        digit(Math.idiv(num, 100) % 10, 1)
+            digit1(Math.idiv(num, 1000) % 10, 0)
+        digit1(num % 10, 3)
+        digit1(Math.idiv(num, 10) % 10, 2)
+        digit1(Math.idiv(num, 100) % 10, 1)
     }
 
 
